@@ -1,0 +1,48 @@
+version: 1.0
+
+executors:
+  my-executor:
+    docker:
+      - image: python:3.8
+    resource_class: medium
+    environment:
+      DJANGO_SETTINGS_MODULE: myproject.settings
+
+commands:
+  pip-install:
+    description: "Install pip packages"
+    steps:
+      - run: pip install -r requirements.txt
+  run-django-server:
+    description: "Run Django Server"
+    parameters:
+      listen_for:
+        type: string
+        default: "0.0.0.0"
+      on:
+        type: integer
+        default: 8000
+    steps:
+      - run: python manage.py run-server {{parameters.listen_for}} {{parameters.on}}
+
+jobs:
+  run-django-tests:
+    executor: my-executor
+    environment:
+      DB_URL: ${DB_URL}
+    steps:
+      - checkout
+      - pip-install
+      - run-django-server:
+          listen_for: 0.0.0.0
+          on: 8000
+      - run:
+          name: Run django tests
+          command: |
+            echo "Running Django tests..."
+            python manage.py test
+
+workflows:
+  deploy-to-non-production:
+    jobs:
+      - run-django-tests
