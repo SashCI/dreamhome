@@ -1,5 +1,3 @@
-# Testing SashCI pipeline validation
-
 version: 1.0
 
 executors:
@@ -10,23 +8,6 @@ executors:
     environment:
       DJANGO_SETTINGS_MODULE: myproject.settings
 
-commands:
-  pip-install:
-    description: "Install pip packages"
-    steps:
-      - run: pip install -r requirements.txt
-  run-django-server:
-    description: "Run Django Server"
-    parameters:
-      listen_for:
-        type: string
-        default: "0.0.0.0"
-      on:
-        type: integer
-        default: 8000
-    steps:
-      - run: python manage.py run-server {{parameters.listen_for}} {{parameters.on}}
-
 jobs:
   run-django-tests:
     executor: my-executor
@@ -34,7 +15,12 @@ jobs:
       DB_URL: ${DB_URL}
     steps:
       - checkout
-      - pip-install
+      - run:
+          name: Install dependencies
+          command: pip install -r requirements.txt
+      - run:
+          name: Run Django server
+          command: python manage.py run-server 0.0.0.0 8000
       - run-django-server:
           listen_for: 0.0.0.0
           on: 8000
