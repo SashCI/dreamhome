@@ -19,6 +19,11 @@ jobs:
           name: Test step
           command: echo "Hello world"
       - run:
+          name: Test step
+          command: |
+            pwd
+            ls -lah
+      - run:
           name: Install dependencies
           command: pip install -r requirements.txt
       - run:
