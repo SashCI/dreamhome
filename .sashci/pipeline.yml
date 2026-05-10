@@ -17,7 +17,7 @@ jobs:
       - checkout
       - run:
           name: Test step
-          command: echo "Hello world new"
+          command: echo "Hello world new two"
       - run:
           name: Test step
           command: |
