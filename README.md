@@ -11,3 +11,5 @@ https://docs.docker.com/compose/install/
 Run the below command from the repository's root directory
 
 `docker-compose up`
+
+Rerun deployment
