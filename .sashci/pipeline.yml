@@ -16,10 +16,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Test step
+          name: Test step 1
           command: echo "Hello world new two"
       - run:
-          name: Test step
+          name: Test step 2
           command: |
             pwd
             ls -lah
