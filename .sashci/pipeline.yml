@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Test step 2
           command: |
-            echo "Testing new builds page"
+            echo "Testing commit message in builds page"
             pwd
             ls -lah
       - run:
