@@ -1,0 +1,39 @@
+# Demonstrates: on: workflow_dispatch, typed inputs:, ${{ inputs.X }} references
+name: Manual Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target deployment environment
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      run_migrations:
+        description: Run database migrations before deploying
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  deploy:
+    runs-on: python:3.11
+    env:
+      DJANGO_SETTINGS_MODULE: dreamhome.settings
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run migrations
+        if: ${{ inputs.run_migrations == true }}
+        run: python manage.py migrate
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+      - name: Deploy to ${{ inputs.environment }}
+        run: |
+          echo "Deploying to ${{ inputs.environment }}"
+          echo "Image tag: ${{ github.sha }}"
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
