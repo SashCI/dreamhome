@@ -10,11 +10,16 @@ on:
 
 jobs:
   test:
-    runs-on: python:3.11
+    runs-on: ubuntu-latest
     env:
       DJANGO_SETTINGS_MODULE: dreamhome.settings
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Python
+        run: |
+          apt-get update -qq && apt-get install -y python3 python3-pip python3-venv
+          python3 -m venv /opt/venv
+          echo 'PATH=/opt/venv/bin:$PATH' >> $GITHUB_ENV
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run tests
