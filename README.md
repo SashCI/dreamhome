@@ -12,4 +12,4 @@ Run the below command from the repository's root directory
 
 `docker-compose up`
 
-Rerun deployment
+Rerun deployment 2026-06-07
